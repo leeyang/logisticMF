@@ -168,33 +168,7 @@ def read_msa(file_path,aadic):
     return msa,mask
     
     
-def runonetarget(target):
-    msafile='multi_test/'+target+'.aln'
-    msa_,mask=read_msa(msafile,aadic)
-    
-    msa=np.eye(21)[msa_]
-    B,n,q=msa.shape
-    [u,ub,v,vb],model=optmize(5523,msa,mask.reshape([B,n,1]),[1,1,10,10],t=100)
-    out=np.reshape(np.dot(u,v)+ub+vb,[B,n,q])
-    out=np.exp(softmax(out))
-    out=np.argmax(out,axis=-1)
-    out=msa_*mask+(1-mask)*out
-    
-    lines=[]
-    for i in range(B):
-        aline=[]
-        for j in range(n):
-            aline.append(inverseaadic[out[i,j]])
-        lines.append(''.join(aline))
-    wfile=open('pseudoaln/'+target+'.aln','w')
-    for aline in lines:
-        wfile.write(aline+'\n')
-    wfile.close()
-    
-if __name__ == "__main__":
-    
 
-    target='T0783'
 
     
     
